@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Ayushlm10/snippetBox/internals/models"
+	"github.com/Ayushlm10/codeVault/internals/models"
 )
 
 type templateData struct {

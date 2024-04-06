@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Ayushlm10/snippetBox/internals/models"
+	"github.com/Ayushlm10/codeVault/internals/models"
 	_ "github.com/go-sql-driver/mysql"
 )
 

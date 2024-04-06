@@ -1,4 +1,4 @@
-module github.com/Ayushlm10/snippetBox
+module github.com/Ayushlm10/codeVault
 
 go 1.22.0
 
