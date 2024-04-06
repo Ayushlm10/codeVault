@@ -10,8 +10,9 @@ import (
 )
 
 type templateData struct {
-	Snippet  *models.Snippet
-	Snippets []*models.Snippet
+	Snippet     *models.Snippet
+	Snippets    []*models.Snippet
+	CurrentYear int
 }
 
 func (a *application) home(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +27,9 @@ func (a *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a.render(w, http.StatusOK, "home.tmpl", &templateData{Snippets: snippets})
+	data := a.newTemplateData(r)
+	data.Snippets = snippets
+	a.render(w, http.StatusOK, "home.tmpl", data)
 }
 
 func (a *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -62,5 +65,7 @@ func (a *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	a.render(w, http.StatusOK, "view.tmpl", &templateData{Snippet: snippet})
+	data := a.newTemplateData(r)
+	data.Snippet = snippet
+	a.render(w, http.StatusOK, "view.tmpl", data)
 }
