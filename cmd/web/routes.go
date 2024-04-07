@@ -1,17 +1,27 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
 
-func (a *application) routes() *http.ServeMux {
+	"github.com/julienschmidt/httprouter"
+	"github.com/justinas/alice"
+)
 
-	mux := http.NewServeMux()
+func (a *application) routes() http.Handler {
+	router := httprouter.New()
+
+	router.NotFound = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		a.notFound(w)
+	})
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
-	mux.Handle("/static/", http.StripPrefix("/static/", fileServer))
-	mux.HandleFunc("/", a.home)
-	mux.HandleFunc("/snippet/create", a.snippetCreate)
-	mux.HandleFunc("/snippet/view", a.snippetView)
+	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static/", fileServer))
+	router.HandlerFunc(http.MethodGet, "/", a.home)
+	router.HandlerFunc(http.MethodGet, "/snippet/view/:id", a.snippetView)
+	router.HandlerFunc(http.MethodGet, "/snippet/create", a.snippetCreate)
+	router.HandlerFunc(http.MethodPost, "/snippet/create", a.snippetCreatePost)
 
-	return mux
+	standardMiddleware := alice.New(a.recovcerPanic, a.logRequest, secureHeaders)
+	return standardMiddleware.Then(router)
 }
