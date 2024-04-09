@@ -16,6 +16,7 @@ type templateData struct {
 	Snippets    []*models.Snippet
 	CurrentYear int
 	Form        any
+	Flash       string
 }
 
 func (a *application) home(w http.ResponseWriter, r *http.Request) {
@@ -93,5 +94,6 @@ func (a *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) 
 		a.serverError(w, err)
 		return
 	}
+	a.sessionManager.Put(r.Context(), "flash", "Snippet successfully created!")
 	http.Redirect(w, r, fmt.Sprintf("/snippet/view/%d", snippetId), http.StatusSeeOther)
 }
