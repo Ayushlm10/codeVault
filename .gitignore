@@ -19,3 +19,6 @@ go.work
 
 #Mac specific
 .DS_Store
+
+#https settings
+tls/
