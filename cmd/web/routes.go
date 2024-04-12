@@ -24,6 +24,12 @@ func (a *application) routes() http.Handler {
 	router.Handler(http.MethodGet, "/snippet/create", scsMiddleware.ThenFunc(a.snippetCreate))
 	router.Handler(http.MethodPost, "/snippet/create", scsMiddleware.ThenFunc(a.snippetCreatePost))
 
+	router.Handler(http.MethodGet, "/user/signup", scsMiddleware.ThenFunc(a.userSignUp))
+	router.Handler(http.MethodPost, "/user/signup", scsMiddleware.ThenFunc(a.userSignUpPost))
+	router.Handler(http.MethodGet, "/user/login", scsMiddleware.ThenFunc(a.userLogin))
+	router.Handler(http.MethodPost, "/user/login", scsMiddleware.ThenFunc(a.userLoginPost))
+	router.Handler(http.MethodPost, "/user/logout", scsMiddleware.ThenFunc(a.userLogout))
+
 	standardMiddleware := alice.New(a.recovcerPanic, a.logRequest, secureHeaders)
 	return standardMiddleware.Then(router)
 }
