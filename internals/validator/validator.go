@@ -8,15 +8,15 @@ import (
 
 // Define a new Validator type which contains a map of validation errors for our // form fields.
 type Validator struct {
-	FieldErrors map[string]string
+	NonFieldErrors []string
+	FieldErrors    map[string]string
 }
 
 // Valid() returns true if the FieldErrors map doesn't contain any entries.
 func (v *Validator) Valid() bool {
-	return len(v.FieldErrors) == 0
+	return len(v.FieldErrors) == 0 && len(v.NonFieldErrors) == 0
 }
 
-// AddFieldError() adds an error message to the FieldErrors map (so long as no // entry already exists for the given key).
 func (v *Validator) AddFieldError(key, message string) {
 	if v.FieldErrors == nil {
 		v.FieldErrors = make(map[string]string)
@@ -26,7 +26,10 @@ func (v *Validator) AddFieldError(key, message string) {
 	}
 }
 
-// CheckField() adds an error message to the FieldErrors map only if a // validation check is not 'ok'.
+func (v *Validator) AddNonFieldError(message string) {
+	v.NonFieldErrors = append(v.NonFieldErrors, message)
+}
+
 func (v *Validator) CheckField(ok bool, key, message string) {
 	if !ok {
 		v.AddFieldError(key, message)
