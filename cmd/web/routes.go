@@ -17,7 +17,7 @@ func (a *application) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	router.Handler(http.MethodGet, "/static/*filepath", http.StripPrefix("/static/", fileServer))
 
-	scsMiddleware := alice.New(a.sessionManager.LoadAndSave)
+	scsMiddleware := alice.New(a.sessionManager.LoadAndSave, noSurf)
 
 	router.Handler(http.MethodGet, "/", scsMiddleware.ThenFunc(a.home))
 	router.Handler(http.MethodGet, "/snippet/view/:id", scsMiddleware.ThenFunc(a.snippetView))

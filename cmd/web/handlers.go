@@ -18,6 +18,7 @@ type templateData struct {
 	Form            any
 	Flash           string
 	IsAuthenticated bool
+	CSRFToken       string
 }
 
 func (a *application) home(w http.ResponseWriter, r *http.Request) {
